@@ -18,6 +18,12 @@
   justify-content: space-between;
 }
 
+a {
+  text-decoration: none;
+  padding: 5px;
+  border: 1px solid palevioletred;
+}
+
 .app__headerImage {
   height: 40px;
   object-fit: contain;

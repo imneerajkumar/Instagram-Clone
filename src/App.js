@@ -169,7 +169,10 @@ function App() {
           alt="Instagram"
         />
         {user ? (
-          <Button onClick={() => auth.signOut()}>Logout</Button>
+          <div> 
+            <a href="https://ig-reels-b94c5.web.app/"><Button>Reels</Button></a>
+            <Button onClick={() => auth.signOut()}>Logout</Button>
+          </div>
         ) : (
         <div className="app__loginContainer">
           <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
