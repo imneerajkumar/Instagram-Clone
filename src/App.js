@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     width: 300,
     backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
+    border: '2px solid #fc5c65',
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
@@ -105,7 +105,7 @@ function App() {
             <center>
               <img 
                 className="app__headerImage"
-                src={process.env.PUBLIC_URL + '/Title.png'}
+                src={process.env.PUBLIC_URL + '/splash.png'}
                 alt="Instagram"
               />
             </center>
@@ -141,7 +141,7 @@ function App() {
             <center>
               <img 
                 className="app__headerImage"
-                src={process.env.PUBLIC_URL + '/Title.PNG'}
+                src={process.env.PUBLIC_URL + '/splash.png'}
                 alt="LetsPost"
               />
             </center>
@@ -165,12 +165,12 @@ function App() {
       <div className="app__header">
         <img 
           className="app__headerImage"
-          src={process.env.PUBLIC_URL + '/Title.PNG'}
+          src={process.env.PUBLIC_URL + '/splash.png'}
           alt="LetsPost"
         />
         {user ? (
           <div> 
-            <a href="https://ig-reels-b94c5.web.app/"><Button>Reels</Button></a>
+            <Button onClick={() => window.scrollTo({top: document.documentElement.scrollHeight, behavior: 'smooth'})} >Post</Button>
             <Button onClick={() => auth.signOut()}>Logout</Button>
           </div>
         ) : (
@@ -182,18 +182,32 @@ function App() {
       )}
       </div>
 
-      <div className="app__posts">
-        <div className="app__postsLeft">
-          {
-            posts.map(({id, post}) => (
-              <Post key={id} postId={id} username={post.username} caption={post.caption} imageUrl={post.imageUrl} user={user} />
-            ))
-          }
-        </div> 
-      </div>
-      
-      {user?.displayName && (
-        <ImageUpload username={user.displayName}/>
+      {user?.displayName ? (
+        <>
+          <div className="app__posts">
+            <div className="app__postsLeft">
+              {
+                posts.map(({id, post}) => (
+                  <Post key={id} postId={id} username={post.username} caption={post.caption} imageUrl={post.imageUrl} user={user} />
+                ))
+              }
+            </div> 
+          </div>
+          <ImageUpload username={user.displayName}/>
+        </>
+      ) : (
+        <div className="welcome-div">
+          <img 
+            className="welcome"
+            src={process.env.PUBLIC_URL + '/splash.png'}
+            alt="Welcome"
+          />
+          <img 
+            className="welcome"
+            src={process.env.PUBLIC_URL + '/welcome.png'}
+            alt="Welcome"
+          />
+        </div>
       )}
     </div>
   );

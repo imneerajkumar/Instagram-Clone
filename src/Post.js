@@ -43,7 +43,7 @@ function Post({ postId, username, caption, imageUrl, user}) {
                 <Avatar 
                     className="post__avatar"
                     alt={username}
-                    src="/static/images/avatar/1.png"
+                    src={process.env.PUBLIC_URL + '/user.png'}
                 />
                 <h3>{username}</h3>
             </div>

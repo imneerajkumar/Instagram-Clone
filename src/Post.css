@@ -25,6 +25,7 @@
 
 .post__avatar {
   margin-right: 10px;
+  background-color: #fc5c65;
 }
 
 .post__commentBox {
@@ -46,7 +47,7 @@
 .post__button {
   flex: 0;
   padding: 10px;
-  color: #6082a3;
+  color: #fc5c65;
   background-color: transparent;
   border-top: 1px solid lightgray;
 }

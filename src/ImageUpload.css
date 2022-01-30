@@ -8,3 +8,8 @@
 .imageupload__progress {
   width: 100%;
 }
+
+.upload {
+  width: 100%;
+  border: 1px solid #fc5c65;
+}

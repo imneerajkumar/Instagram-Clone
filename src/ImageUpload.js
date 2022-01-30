@@ -53,11 +53,15 @@ function ImageUpload({ username }) {
                 });
             }
         );
+
+        setTimeout(() => {
+            window.scrollTo({top: 0, behavior: 'smooth'})
+        }, 4000);
     };
 
     return (
         <div className="imageupload">
-            <progress className="imageupload__progress" value={progress} max="100" />
+            <progress className="imageupload__progress" value={progress} max="100"/>
             <input 
                 type="text" 
                 placeholder="Enter a caption..." 
@@ -65,9 +69,11 @@ function ImageUpload({ username }) {
                 value={caption}
             />
             <input type="file" onChange={handleChange}/>
-            <Button onClick={handleUpload}>
-                Upload
-            </Button>
+            <div className="upload">
+                <Button fullWidth onClick={handleUpload}>
+                    Upload
+                </Button>
+            </div>
         </div>
     );
 }
