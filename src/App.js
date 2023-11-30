@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import './App.css';
+import "./App.css";
 import Post from "./Post";
 import ImageUpload from "./ImageUpload";
 import { db, auth } from "./firebase";
-import { makeStyles } from '@material-ui/core/styles';
-import Modal from '@material-ui/core/Modal';
-import { Button, Input} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import Modal from "@material-ui/core/Modal";
+import { Button, Input } from "@material-ui/core";
 
 function getModalStyle() {
   const top = 50;
@@ -20,10 +20,10 @@ function getModalStyle() {
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    position: 'absolute',
+    position: "absolute",
     width: 300,
     backgroundColor: theme.palette.background.paper,
-    border: '2px solid #fc5c65',
+    border: "2px solid #fc5c65",
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
@@ -43,168 +43,182 @@ function App() {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((authUser) => {
-      if (authUser) {   
+      if (authUser) {
         // User logged in
         console.log(authUser);
         setUser(authUser);
       } else {
         // User logged out
-        setUser(null); 
+        setUser(null);
       }
-    })
+    });
 
     return () => {
       unsubscribe();
-    }
+    };
   }, [user, username]);
 
   useEffect(() => {
-    db.collection("posts").orderBy("timestamp", "desc").onSnapshot(snapshot => {
-      // everytime a new post is added.
-      setPosts(snapshot.docs.map(doc => ({
-        id: doc.id,
-        post: doc.data()
-      })));
-    })                
+    db.collection("posts")
+      .orderBy("timestamp", "desc")
+      .onSnapshot((snapshot) => {
+        // everytime a new post is added.
+        setPosts(
+          snapshot.docs.map((doc) => ({
+            id: doc.id,
+            post: doc.data(),
+          }))
+        );
+      });
   }, []);
 
   const signUp = (event) => {
     event.preventDefault();
 
     auth
-    .createUserWithEmailAndPassword(email, password)
-    .then((authUser) => {
-      authUser.user.updateProfile({
-        displayName: username
+      .createUserWithEmailAndPassword(email, password)
+      .then((authUser) => {
+        authUser.user.updateProfile({
+          displayName: username,
+        });
       })
-    })
-    .catch((error) => alert(error.message))
+      .catch((error) => alert(error.message));
 
     setOpen(false);
-  }
+  };
 
   const signIn = (event) => {
     event.preventDefault();
 
     auth
-    .signInWithEmailAndPassword(email, password)
-    .catch((error) => alert(error.message))
+      .signInWithEmailAndPassword(email, password)
+      .catch((error) => alert(error.message));
 
     setOpenSignIn(false);
-  }
+  };
 
   return (
     <div className="app">
-  
-      <Modal
-        open={open}
-        onClose={() => setOpen(false)}
-      >
+      <Modal open={open} onClose={() => setOpen(false)}>
         <div style={modalStyle} className={classes.paper}>
           <form className="app__signup">
             <center>
-              <img 
+              <img
                 className="app__headerImage"
-                src={process.env.PUBLIC_URL + '/splash.png'}
+                src={process.env.PUBLIC_URL + "/splash.png"}
                 alt="Instagram"
               />
             </center>
-            <Input 
+            <Input
               placeholder="username"
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
-            <Input 
+            <Input
               placeholder="email"
               type="text"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            <Input 
+            <Input
               placeholder="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <Button type="Submit" onClick={signUp}>Sign Up</Button>
+            <Button type="Submit" onClick={signUp}>
+              Sign Up
+            </Button>
           </form>
         </div>
       </Modal>
 
-      <Modal
-        open={openSignIn}
-        onClose={() => setOpenSignIn(false)}
-      >
+      <Modal open={openSignIn} onClose={() => setOpenSignIn(false)}>
         <div style={modalStyle} className={classes.paper}>
           <form className="app__signup">
             <center>
-              <img 
+              <img
                 className="app__headerImage"
-                src={process.env.PUBLIC_URL + '/splash.png'}
+                src={process.env.PUBLIC_URL + "/splash.png"}
                 alt="LetsPost"
               />
             </center>
-            <Input 
+            <Input
               placeholder="email"
               type="text"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            <Input 
+            <Input
               placeholder="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <Button onClick={signIn} type="submit">Sign In</Button>
+            <Button onClick={signIn} type="submit">
+              Sign In
+            </Button>
           </form>
         </div>
       </Modal>
 
       <div className="app__header">
-        <img 
+        <img
           className="app__headerImage"
-          src={process.env.PUBLIC_URL + '/splash.png'}
+          src={process.env.PUBLIC_URL + "/splash.png"}
           alt="LetsPost"
         />
         {user ? (
-          <div> 
-            <Button onClick={() => window.scrollTo({top: document.documentElement.scrollHeight, behavior: 'smooth'})} >Post</Button>
+          <div>
+            <Button
+              onClick={() =>
+                window.scrollTo({
+                  top: document.documentElement.scrollHeight,
+                  behavior: "smooth",
+                })
+              }
+            >
+              Post
+            </Button>
             <Button onClick={() => auth.signOut()}>Logout</Button>
           </div>
         ) : (
-        <div className="app__loginContainer">
-          <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
-          <Button onClick={() => setOpen(true)}>Sign Up</Button>
-        </div>
-        
-      )}
+          <div className="app__loginContainer">
+            <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
+            <Button onClick={() => setOpen(true)}>Sign Up</Button>
+          </div>
+        )}
       </div>
 
       {user?.displayName ? (
         <>
           <div className="app__posts">
             <div className="app__postsLeft">
-              {
-                posts.map(({id, post}) => (
-                  <Post key={id} postId={id} username={post.username} caption={post.caption} imageUrl={post.imageUrl} user={user} />
-                ))
-              }
-            </div> 
+              {posts.map(({ id, post }) => (
+                <Post
+                  key={id}
+                  postId={id}
+                  username={post.username}
+                  caption={post.caption}
+                  imageUrl={post.imageUrl}
+                  user={user}
+                />
+              ))}
+            </div>
           </div>
-          <ImageUpload username={user.displayName}/>
+          <ImageUpload username={user.displayName} />
         </>
       ) : (
         <div className="welcome-div">
-          <img 
+          <img
             className="welcome"
-            src={process.env.PUBLIC_URL + '/splash.png'}
+            src={process.env.PUBLIC_URL + "/splash.png"}
             alt="Welcome"
           />
-          <img 
+          <img
             className="welcome"
-            src={process.env.PUBLIC_URL + '/welcome.png'}
+            src={process.env.PUBLIC_URL + "/welcome.png"}
             alt="Welcome"
           />
         </div>
